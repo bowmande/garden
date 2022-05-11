@@ -9,6 +9,10 @@ variables:
 
 services:
   - name: backend
+    localMode:
+      localAppPort: 8090
+      command: [] # [ "command-to-start-the-local-service-on-the-localAppPort" ]
+      containerName: "backend"
     healthCheck:
       httpGet:
         path: /hello-backend
