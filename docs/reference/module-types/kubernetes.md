@@ -226,6 +226,28 @@ devMode:
   # workload is used.
   containerName:
 
+# Specifies necessary configuration details of the local application which will replace a target remote service in the
+# k8s cluster.
+#
+# The target service in the k8s cluster will be replaced by a proxy container with an ssh server running,
+# and the reverse port forwarding will be automatically configured to route the traffic to the local service and back.
+#
+# If the `command` is provided then its value must contain a command which is executable from any location.
+# The `command` should not depend on the current service or module path.
+#
+# Local mode is enabled by setting the `--local-mode` option on the `garden deploy` command.
+#
+# See the [Local Mode guide](https://docs.garden.io/guides/running-service-in-local-mode.md) for more information.
+localMode:
+  # The command to run the local application (optional).
+  command:
+
+  # The working port of the local application.
+  localAppPort:
+
+  # The k8s name of the remote container (optional).
+  containerName:
+
 # POSIX-style paths to YAML files to load manifests from. Each can contain multiple manifests, and can include any
 # Garden template strings, which will be resolved before applying the manifests.
 files: []
@@ -976,6 +998,54 @@ Set the default group on files and directories at the target. Specify either an 
 [devMode](#devmode) > containerName
 
 Optionally specify the name of a specific container to sync to. If not specified, the first container in the workload is used.
+
+| Type     | Required |
+| -------- | -------- |
+| `string` | No       |
+
+### `localMode`
+
+Specifies necessary configuration details of the local application which will replace a target remote service in the k8s cluster.
+
+The target service in the k8s cluster will be replaced by a proxy container with an ssh server running,
+and the reverse port forwarding will be automatically configured to route the traffic to the local service and back.
+
+If the `command` is provided then its value must contain a command which is executable from any location.
+The `command` should not depend on the current service or module path.
+
+Local mode is enabled by setting the `--local-mode` option on the `garden deploy` command.
+
+See the [Local Mode guide](https://docs.garden.io/guides/running-service-in-local-mode.md) for more information.
+
+| Type     | Required |
+| -------- | -------- |
+| `object` | No       |
+
+### `localMode.command[]`
+
+[localMode](#localmode) > command
+
+The command to run the local application (optional).
+
+| Type            | Required |
+| --------------- | -------- |
+| `array[string]` | No       |
+
+### `localMode.localAppPort`
+
+[localMode](#localmode) > localAppPort
+
+The working port of the local application.
+
+| Type     | Required |
+| -------- | -------- |
+| `number` | No       |
+
+### `localMode.containerName`
+
+[localMode](#localmode) > containerName
+
+The k8s name of the remote container (optional).
 
 | Type     | Required |
 | -------- | -------- |

@@ -306,7 +306,6 @@ export const containerDevModeSchema = () =>
 export interface ContainerLocalModeSpec {
   localAppPort: number
   command?: string[]
-  containerName?: string
 }
 
 export const containerLocalModeSchema = () =>
@@ -316,7 +315,6 @@ export const containerLocalModeSchema = () =>
       .optional()
       .items(joi.string())
       .description("The command to run the local application (optional)."),
-    containerName: joi.string().optional().description("The k8s name of the remote container (optional)."),
     localAppPort: joi.number().description("The working port of the local application."),
   }).description(dedent`
     Specifies necessary configuration details of the local application which will replace a target remote service in the k8s cluster.

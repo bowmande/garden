@@ -25,6 +25,8 @@ import {
   ContainerDevModeSpec,
   ContainerEnvVars,
   containerEnvVarsSchema,
+  containerLocalModeSchema,
+  ContainerLocalModeSpec,
   ContainerRegistryConfig,
   containerRegistryConfigSchema,
   syncDefaultDirectoryModeSchema,
@@ -44,6 +46,7 @@ import { V1Toleration } from "@kubernetes/client-node"
 import { runPodSpecIncludeFields } from "./run"
 import { KUBECTL_DEFAULT_TIMEOUT } from "./kubectl"
 import { devModeGuideLink } from "./dev-mode"
+import { localModeGuideLink } from "./local-mode"
 
 export const DEFAULT_KANIKO_IMAGE = "gcr.io/kaniko-project/executor:v1.6.0-debug"
 
@@ -97,6 +100,27 @@ export const kubernetesDevModeDefaultsSchema = () =>
     Dev mode is enabled when running the \`garden dev\` command, and by setting the \`--dev\` flag on the \`garden deploy\` command.
 
     See the [Code Synchronization guide](${devModeGuideLink}) for more information.
+  `)
+
+export interface KubernetesLocalModeSpec extends ContainerLocalModeSpec {
+  containerName?: string
+}
+
+export const kubernetesLocalModeSchema = () =>
+  containerLocalModeSchema().keys({
+    containerName: joi.string().optional().description("The k8s name of the remote container (optional)."),
+  }).description(dedent`
+    Specifies necessary configuration details of the local application which will replace a target remote service in the k8s cluster.
+
+    The target service in the k8s cluster will be replaced by a proxy container with an ssh server running,
+    and the reverse port forwarding will be automatically configured to route the traffic to the local service and back.
+
+    If the \`command\` is provided then its value must contain a command which is executable from any location.
+    The \`command\` should not depend on the current service or module path.
+
+    Local mode is enabled by setting the \`--local-mode\` option on the \`garden deploy\` command.
+
+    See the [Local Mode guide](${localModeGuideLink}) for more information.
   `)
 
 export interface ProviderSecretRef {

@@ -260,7 +260,7 @@ function patchMainContainer(
  * Configures the specified Deployment, DaemonSet or StatefulSet for local mode.
  */
 export async function configureLocalMode(configParams: ConfigureLocalModeParams): Promise<void> {
-  const { target, service, spec: localModeSpec, log } = configParams
+  const { target, service, log } = configParams
   set(target, ["metadata", "annotations", gardenAnnotationKey("local-mode")], "true")
 
   log.info({
@@ -270,16 +270,8 @@ export async function configureLocalMode(configParams: ConfigureLocalModeParams)
     ),
   })
 
-  const remoteContainerName = localModeSpec.containerName
-  const mainContainer = getResourceContainer(target, remoteContainerName)
-  if (!!remoteContainerName && !mainContainer) {
-    throw new ConfigurationError(
-      `Could not find remote k8s container for name '${remoteContainerName}'. ` +
-        `Please check the localMode configuration.`,
-      {}
-    )
-  }
-  const proxyContainerName = !!remoteContainerName ? remoteContainerName : mainContainer.name
+  const mainContainer = getResourceContainer(target)
+  const proxyContainerName = mainContainer.name
 
   const keyPair = await ProxySshKeystore.getKeyPair(service, log)
 
