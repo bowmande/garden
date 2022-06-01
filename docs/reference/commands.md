@@ -2302,9 +2302,6 @@ modules:
 
     # The names of all the tasks and services that the tasks in this module depend on.
     taskDependencyNames:
-
-    # The root directory to store proxy ssh keys for the services which are running in local mode.
-    localModeSshKeystorePath:
 ```
 
 ### garden get status
