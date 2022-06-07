@@ -260,6 +260,7 @@ export async function processModules({
       }
     })
     garden.events.on("deployRequested", async (event: Events["deployRequested"]) => {
+      console.log("deployRequested")
       try {
         graph = await garden.getConfigGraph({ log, emit: false })
         let prefix: string
